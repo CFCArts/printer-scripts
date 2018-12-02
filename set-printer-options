@@ -10,11 +10,22 @@ read -e
 printername="$REPLY"
 echo
 
+printf "\e[1mDefault to grayscale?\e[0m [Y/n] "
+read -e
+colorentry="$REPLY"
+
+HPColorAsGray="BlackInkOnly"  # default to grayscale
+if [[ "$colorentry" = "n" ]]; then
+  echo "Defaulting to color."
+  HPColorAsGray="None"
+fi
+echo
+
 set -o xtrace
 lpadmin -p "$printername" -o Duplex=DuplexNoTumble \
                           -o MediaType=Plain \
                           -o HPEasyColor=False \
-                          -o HPColorAsGray=BlackInkOnly
+                          -o HPColorAsGray=$HPColorAsGray
 set +o xtrace
 
 printf "\n\e[1mDone!\e[0m\n\n"
