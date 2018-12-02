@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+
+# This script uses CUPS to configure the printing defaults for the HP printer
+# drivers for HP multifunction copiers/printers. It was designed to work on
+# macOS with the HP Color LaserJet Managed Flow MFP E77830.
+#
+# To see all the CUPS printer options: lpoptions -l
+
 set -e
 
 echo
