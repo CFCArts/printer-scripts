@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+
+echo
+printf "\e[1mCUPS printer names:\e[0m\n"; lpstat -a | cut -f1 -d ' '; echo; echo
+
+
+printf "\e[1mWhich one?\e[0m "
+read -e
+printername="$REPLY"
+echo
+
+set -o xtrace
+lpadmin -p "$printername" -o Duplex=DuplexNoTumble \
+                          -o MediaType=Plain \
+                          -o HPEasyColor=False \
+                          -o HPColorAsGray=BlackInkOnly
+set +o xtrace
+
+printf "\n\e[1mDone!\e[0m\n\n"
+
