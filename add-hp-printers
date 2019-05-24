@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# This script uses CUPS to create four printer profiles for our two HP
+# multifunction copiers/printers. It was designed to work on macOS with the HP
+# Color LaserJet Managed Flow MFP E77830.
+#
+# It would be better to create two CUPS printers, each with two macOS presets,
+# but I haven't figured out a good way to programmatically create presets yet.
+# You use `defaults write`, but a typical preset created through the UI is a
+# giant plist.
+
+set -e
+
+drivername="HP Color MFP E77822-25-30"
+lpinfo --make-and-model "$drivername" -m > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  echo "Error: $drivername printer driver missing"
+  exit 1
+fi
+
+# TODO probably more robust to get this from lpinfo
+ppd_path="/Library/Printers/PPDs/Contents/Resources/HP Color MFP E77822-25-30.gz"
+
+common_options="-o printer-is-shared=false -o Duplex=DuplexNoTumble -o MediaType=Plain -o HPEasyColor=False"
+
+set -o xtrace
+lpadmin -p "CFCArts_Workroom_HP_E77830_BW" -D "CFCArts Workroom (B/W)" -L "CFCArts Workroom" \
+        -v lpd://192.168.0.205/print -P "$ppd_path" \
+        -o HPColorAsGray=BlackInkOnly $common_options \
+        -E
+
+lpadmin -p "CFCArts_Workroom_HP_E77830_Color" -D "CFCArts Workroom (color)" -L "CFCArts Workroom" \
+        -v lpd://192.168.0.205/print -P "$ppd_path" \
+        -o HPColorAsGray=None $common_options \
+        -E
+
+lpadmin -p "CFCArts_Edland_HP_E77830_BW" -D "CFCArts Edland (B/W)" -L "CFCArts Edland" \
+        -v lpd://192.168.0.210/print -P "$ppd_path" \
+        -o HPColorAsGray=BlackInkOnly $common_options \
+        -E
+
+lpadmin -p "CFCArts_Edland_HP_E77830_Color" -D "CFCArts Edland (color)" -L "CFCArts Edland" \
+        -v lpd://192.168.0.210/print -P "$ppd_path" \
+        -o HPColorAsGray=None $common_options \
+        -E
+set +o xtrace
