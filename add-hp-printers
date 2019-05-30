@@ -23,24 +23,26 @@ ppd_path="/Library/Printers/PPDs/Contents/Resources/HP Color MFP E77822-25-30.gz
 
 common_options="-o printer-is-shared=false -o Duplex=DuplexNoTumble -o MediaType=Plain -o HPEasyColor=False"
 
-set -o xtrace
+printf "\e[1mAdding CFCArts Lobby (B/W)\e[0m\n"
 lpadmin -p "CFCArts_Lobby_HP_E77830_BW" -D "CFCArts Lobby (B/W)" -L "CFCArts Lobby" \
         -v lpd://192.168.0.205/print -P "$ppd_path" \
         -o HPColorAsGray=BlackInkOnly $common_options \
         -E
 
+printf "\e[1mAdding CFCArts Lobby (color)\e[0m\n"
 lpadmin -p "CFCArts_Lobby_HP_E77830_Color" -D "CFCArts Lobby (color)" -L "CFCArts Lobby" \
         -v lpd://192.168.0.205/print -P "$ppd_path" \
         -o HPColorAsGray=None $common_options \
         -E
 
+printf "\e[1mAdding CFCArts Edland (B/W)\e[0m\n"
 lpadmin -p "CFCArts_Edland_HP_E77830_BW" -D "CFCArts Edland (B/W)" -L "CFCArts Edland" \
         -v lpd://192.168.0.210/print -P "$ppd_path" \
         -o HPColorAsGray=BlackInkOnly $common_options \
         -E
 
+printf "\e[1mAdding CFCArts Edland (color)\e[0m\n"
 lpadmin -p "CFCArts_Edland_HP_E77830_Color" -D "CFCArts Edland (color)" -L "CFCArts Edland" \
         -v lpd://192.168.0.210/print -P "$ppd_path" \
         -o HPColorAsGray=None $common_options \
         -E
-set +o xtrace
